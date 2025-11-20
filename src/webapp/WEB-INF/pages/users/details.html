@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Details</title>
+</head>
+<body>
+
+<h1>User Details</h1>
+
+<p><b>ID:</b> <span th:text="${user.id}"></span></p>
+<p><b>Name:</b> <span th:text="${user.firstName}"></span></p>
+<p><b>LastName:</b> <span th:text="${user.lastName}"></span></p>
+<p><b>Email:</b> <span th:text="${user.email}"></span></p>
+
+<br>
+<a th:href="@{|/${user.id}/edit|}">Edit</a>
+<br><br>
+<a href="/">Back</a>
+
+</body>
+</html>
