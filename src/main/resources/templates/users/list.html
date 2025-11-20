@@ -7,7 +7,7 @@
 
 <h1>User List</h1>
 
-<a href="/create">+ Create new User</a>
+<a href="/users/create">+ Create new User</a>
 
 <hr>
 
@@ -28,11 +28,11 @@
         <td th:text="${u.lastName}"></td>
         <td th:text="${u.email}"></td>
         <td>
-            <a th:href="@{|/${u.id}|}">View</a>
+            <a th:href="@{|/users/${u.id}|}">View</a>
             |
-            <a th:href="@{|/${u.id}/edit|}">Edit</a>
+            <a th:href="@{|/users/${u.id}/edit|}">Edit</a>
             |
-            <form th:action="@{|/${u.id}/delete|}" method="post" style="display:inline">
+            <form th:action="@{|/users/${u.id}/delete|}" method="post" style="display:inline">
                 <button type="submit">Delete</button>
             </form>
         </td>

@@ -1,12 +1,13 @@
 
-package web.dao;
+package web.spring_boot_mvc.dao;
+
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import web.model.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import web.spring_boot_mvc.model.User;
 
 @Repository
 public class UserDaoImpl implements UserDao {
