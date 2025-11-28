@@ -2,10 +2,13 @@ package ru.itmentor.spring.boot_security.demo.service;
 
 import java.util.List;
 
+import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 public interface UserService {
     void create(User user);
+
+    void createRole(Role role);
 
     User read(Long id);
 
@@ -13,5 +16,9 @@ public interface UserService {
 
     void delete(Long id);
 
+    void deleteRole(Long id);
+
     List<User> findAll();
+
+    List<Role> findAllRoles();
 }

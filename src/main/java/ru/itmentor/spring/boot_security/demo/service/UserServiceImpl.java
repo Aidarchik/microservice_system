@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.itmentor.spring.boot_security.demo.dao.UserDao;
+import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 import java.util.List;
@@ -39,9 +40,27 @@ public class UserServiceImpl implements UserService {
         userDao.delete(id);
     }
 
+    @Transactional
+    @Override
+    public void deleteRole(Long id) {
+        userDao.deleteRole(id);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<User> findAll() {
         return userDao.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Role> findAllRoles() {
+        return userDao.findAllRoles();
+    }
+
+    @Transactional
+    @Override
+    public void createRole(Role role) {
+        userDao.createRole(role);
     }
 }

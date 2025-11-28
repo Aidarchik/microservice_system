@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
+import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 @Repository
@@ -19,6 +20,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void create(User user) {
         entityManager.persist(user);
+    }
+
+    @Override
+    public void createRole(Role role) {
+        entityManager.persist(role);
     }
 
     @Override
@@ -39,7 +45,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void deleteRole(Long id) {
+        entityManager.createQuery("DELETE FROM Role role WHERE role.id= :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    @Override
     public List<User> findAll() {
         return entityManager.createQuery("SELECT user FROM User user", User.class).getResultList();
+    }
+
+    @Override
+    public List<Role> findAllRoles() {
+        return entityManager.createQuery("SELECT role FROM Role role", Role.class).getResultList();
     }
 }
