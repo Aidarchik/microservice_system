@@ -1,4 +1,4 @@
-package ru.itmentor.spring.boot_security.demo.model;
+package ru.itmentor.spring.boot_security.demo.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,8 +33,7 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @ManyToMany
-    // (fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User() {

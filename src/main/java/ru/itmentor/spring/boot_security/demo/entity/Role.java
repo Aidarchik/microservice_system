@@ -1,4 +1,4 @@
-package ru.itmentor.spring.boot_security.demo.model;
+package ru.itmentor.spring.boot_security.demo.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

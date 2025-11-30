@@ -1,9 +1,10 @@
-package ru.itmentor.spring.boot_security.demo.model;
+package ru.itmentor.spring.boot_security.demo.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.itmentor.spring.boot_security.demo.entity.User;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -15,7 +16,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.user.getRoles();// .stream().map(role -> (GrantedAuthority) role).toList();
+        return this.user.getRoles();
     }
 
     @Override

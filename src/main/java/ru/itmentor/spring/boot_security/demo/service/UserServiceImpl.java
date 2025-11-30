@@ -1,66 +1,50 @@
 package ru.itmentor.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import ru.itmentor.spring.boot_security.demo.dao.UserDao;
-import ru.itmentor.spring.boot_security.demo.model.Role;
-import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.entity.User;
+import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
-    @Transactional
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public void create(User user) {
-        userDao.create(user);
+        userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public User read(Long id) {
-        return userDao.read(id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    @Transactional
     @Override
     public void update(User user) {
-        userDao.update(user);
+        userRepository.save(user);
     }
 
-    @Transactional
     @Override
     public void delete(Long id) {
-        userDao.delete(id);
+        userRepository.delete(
+                userRepository.findById(id)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"))
+        );
     }
 
-    @Transactional
-    @Override
-    public void deleteRole(Long id) {
-        userDao.deleteRole(id);
-    }
-
-    @Transactional(readOnly = true)
     @Override
     public List<User> findAll() {
-        return userDao.findAll();
+        return userRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Role> findAllRoles() {
-        return userDao.findAllRoles();
-    }
-
-    @Transactional
-    @Override
-    public void createRole(Role role) {
-        userDao.createRole(role);
-    }
 }
