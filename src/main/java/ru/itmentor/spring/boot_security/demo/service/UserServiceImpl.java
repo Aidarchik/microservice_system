@@ -19,6 +19,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User readByUsername(String userName) {
+        return userRepository.findByFirstName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userName));
+    }
+
+    @Override
     public void create(User user) {
         userRepository.save(user);
     }
@@ -38,8 +44,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         userRepository.delete(
                 userRepository.findById(id)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"))
-        );
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 
     @Override

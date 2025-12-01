@@ -1,97 +1,51 @@
 package ru.itmentor.spring.boot_security.demo.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ru.itmentor.spring.boot_security.demo.entity.Role;
 import ru.itmentor.spring.boot_security.demo.entity.User;
-import ru.itmentor.spring.boot_security.demo.service.RoleService;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
-    private final RoleService roleService;
 
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
-    }
-
-    // ----- READ ALL -----
-    @GetMapping("/")
-    public String listUsers(Model model) {
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("role", roleService.findAllRoles());
-        return "users/list"; // users/list.html
     }
 
     // ----- READ ONE -----
-    @GetMapping("/{id}")
-    public String getUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.read(id));
+    @GetMapping
+    public String getUser(Authentication auth, Model model) {
+        User user = userService.readByUsername(auth.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("editUrl", "/user/edit");
         return "users/details"; // users/details.html
     }
 
-    // ----- CREATE: FORM -----
-    @GetMapping("/create")
-    public String createForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("role", new Role());
-        return "users/create"; // users/create.html
-    }
-
-    // ----- CREATE: SUBMIT -----
-    @PostMapping
-    public String create(@ModelAttribute("user") User user, @RequestParam("nameRoles") String[] role) {
-        user.setRoles(roleService.findRoleByName(role));
-        user.setEnabled(true);
-        userService.create(user);
-        return "redirect:/users/";
-    }
-
-    // ----- CREATE: SUBMIT -----
-    @PostMapping("/role")
-    public String createRole(@ModelAttribute("role") Role role) {
-        roleService.createRole(role);
-        return "redirect:/users/";
-    }
-
     // ----- UPDATE: FORM -----
-    @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.read(id));
+    @GetMapping("/edit")
+    public String editForm(Authentication auth, Model model) {
+        User user = userService.readByUsername(auth.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("actionUrl", "/user/edit");
         return "users/edit"; // users/edit.html
     }
 
     // ----- UPDATE: SUBMIT -----
-    @PostMapping("/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
-        user.setId(id);
+    @PostMapping("/edit")
+    public String update(Authentication auth, @ModelAttribute("user") User user) {
+        Long userId = userService.readByUsername(auth.getName()).getId();
+        user.setId(userId);
         user.setEnabled(true);
         userService.update(user);
-        return "redirect:/users/";
-    }
-
-    // ----- DELETE -----
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) {
-        userService.delete(id);
-        return "redirect:/users/";
-    }
-
-    @PostMapping("/{id}/deleterole")
-    public String deleteRole(@PathVariable("id") Long id) {
-        roleService.deleteRole(id);
-        return "redirect:/users/";
+        return "redirect:/user";
     }
 
 }

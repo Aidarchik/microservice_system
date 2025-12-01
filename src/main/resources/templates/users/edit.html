@@ -7,7 +7,7 @@
 
 <h1>Edit User</h1>
 
-<form th:action="@{|/users/${user.id}|}" method="post" th:object="${user}">
+<form th:action="${actionUrl}" method="post" th:object="${user}">
     <label>ID:</label><br>
     <input type="text" th:value="${user.id}" disabled><br><br>
 
@@ -24,7 +24,7 @@
 </form>
 
 <br>
-<a href="/users/">Back</a>
+<a href="/user">Back</a>
 
 </body>
 </html>

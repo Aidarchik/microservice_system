@@ -37,6 +37,7 @@ public class AdminController {
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.read(id));
+        model.addAttribute("editUrl", "/admin/" + id + "edit");
         return "users/details"; // users/details.html
     }
 
@@ -55,20 +56,20 @@ public class AdminController {
         user.setRoles(roleService.findRoleByName(role));
         user.setEnabled(true);
         userService.create(user);
-        return "redirect:/users/";
+        return "redirect:/admin/";
     }
 
-    // ----- CREATE: SUBMIT -----
     @PostMapping("/role")
     public String createRole(@ModelAttribute("role") Role role) {
         roleService.createRole(role);
-        return "redirect:/users/";
+        return "redirect:/admin/";
     }
 
     // ----- UPDATE: FORM -----
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.read(id));
+        model.addAttribute("actionUrl", "/admin/" + id);
         return "users/edit"; // users/edit.html
     }
 
@@ -78,20 +79,20 @@ public class AdminController {
         user.setId(id);
         user.setEnabled(true);
         userService.update(user);
-        return "redirect:/users/";
+        return "redirect:/admin/";
     }
 
     // ----- DELETE -----
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) {
         userService.delete(id);
-        return "redirect:/users/";
+        return "redirect:/admin/";
     }
 
     @PostMapping("/{id}/deleterole")
     public String deleteRole(@PathVariable("id") Long id) {
         roleService.deleteRole(id);
-        return "redirect:/users/";
+        return "redirect:/admin/";
     }
 
 }

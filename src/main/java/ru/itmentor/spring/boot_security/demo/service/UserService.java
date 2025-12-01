@@ -10,6 +10,8 @@ public interface UserService {
 
     User read(Long id);
 
+    User readByUsername(String userName);
+
     void update(User user);
 
     void delete(Long id);
