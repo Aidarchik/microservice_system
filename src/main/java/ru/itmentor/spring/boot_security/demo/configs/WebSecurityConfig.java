@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -36,10 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/admin/**", "/api/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/user/**","/api/user/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/login").permitAll()
-                .antMatchers("/admin").hasAnyRole("ADMIN")
-                .antMatchers("/admin/**").hasAnyRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -54,19 +54,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsServiceImpl);
-        // .passwordEncoder(bCryptPasswordEncoder());
+                .userDetailsService(userDetailsServiceImpl)
+                .passwordEncoder(bCryptPasswordEncoder());
     }
 
-    // @Bean
-    // public BCryptPasswordEncoder bCryptPasswordEncoder() {
-    // return new BCryptPasswordEncoder();
-    // }
+     @Bean
+     public PasswordEncoder bCryptPasswordEncoder() {
+     return new BCryptPasswordEncoder();
+     }
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+//    @Bean
+//    public PasswordEncoder getPasswordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 
     // аутентификация inMemory
     // @Bean

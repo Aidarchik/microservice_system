@@ -11,7 +11,6 @@
 <p><b>Name:</b> <span th:text="${user.firstName}"></span></p>
 <p><b>LastName:</b> <span th:text="${user.lastName}"></span></p>
 <p><b>Email:</b> <span th:text="${user.email}"></span></p>
-<p><b>Password:</b> <span th:text="${user.password}"></span></p>
 <p><b>Role:</b> <ul th:each="r : ${user.getRoles()}">
     <li th:text="${r.roleName}"></li>
 </ul></p>
