@@ -36,7 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/index").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/admin").hasAnyRole("ADMIN")
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -52,13 +55,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(userDetailsServiceImpl);
-//                .passwordEncoder(bCryptPasswordEncoder());
+        // .passwordEncoder(bCryptPasswordEncoder());
     }
 
-//    @Bean
-//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    // @Bean
+    // public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    // return new BCryptPasswordEncoder();
+    // }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {

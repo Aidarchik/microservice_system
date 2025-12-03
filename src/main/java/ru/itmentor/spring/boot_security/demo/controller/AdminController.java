@@ -37,7 +37,8 @@ public class AdminController {
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.read(id));
-        model.addAttribute("editUrl", "/admin/" + id + "edit");
+        model.addAttribute("editUrl", "/admin/" + id + "/edit");
+        model.addAttribute("showLinkBack", true);
         return "users/details"; // users/details.html
     }
 
@@ -69,13 +70,20 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.read(id));
+        model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("actionUrl", "/admin/" + id);
+        model.addAttribute("backUrl", "/admin/" + id);
         return "users/edit"; // users/edit.html
     }
 
     // ----- UPDATE: SUBMIT -----
     @PostMapping("/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
+    public String update(@PathVariable("id") Long id, @ModelAttribute("user") User user,
+            @RequestParam("nameRoles") String[] role) {
+
+        for (String r : role)
+            System.out.println("РОЛИ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + r);
+        user.setRoles(roleService.findRoleByName(role));
         user.setId(id);
         user.setEnabled(true);
         userService.update(user);

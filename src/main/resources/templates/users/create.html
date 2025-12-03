@@ -21,13 +21,16 @@
     <label>Password:</label><br>
     <input type="text" th:field="*{password}" required><br><br>
 
-    <select name="nameRoles">
-        <option
-                th:each="role : ${roles}"
-                th:value="${role.roleName}"
-                th:text="${role.getRoleName()}">
-        </option>
-    </select>
+    <p>Выбор роли:</p> 
+    <div th:each="role : ${roles}">
+        <input  type="checkbox"
+                th:id="'role_' + ${role.id}"
+                name="nameRoles"
+                th:value="${role.roleName}"/>
+        <label  th:for="'role_' + ${role.id}">
+            <span th:text="${role.roleName}"></span>
+        </label>
+    </div><br><br>
 
     <button type="submit">Create</button>
 </form><br><br>

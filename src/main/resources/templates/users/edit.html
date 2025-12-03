@@ -19,12 +19,30 @@
 
     <label>Email:</label><br>
     <input type="email" th:field="*{email}" required><br><br>
+    
+    <label>Password:</label><br>
+    <input type="text" th:field="*{password}" required><br><br>
+
+     <label>Roles:</label><br>
+    <div th:each="role : ${roles}">
+        <input  type="checkbox"
+                th:id="'role_' + ${role.id}"
+                name="nameRoles"
+                th:value="${role.roleName}"/>
+        <label  th:for="'role_' + ${role.id}">
+            <span th:text="${role.roleName}"></span>
+        </label>
+    </div><br><br>
 
     <button type="submit">Save</button>
 </form>
 
 <br>
-<a href="/user">Back</a>
+<a th:href="${backUrl}">Back</a>
+
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Logout"/>
+</form>
 
 </body>
 </html>

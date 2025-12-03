@@ -26,6 +26,7 @@ public class UserController {
         User user = userService.readByUsername(auth.getName());
         model.addAttribute("user", user);
         model.addAttribute("editUrl", "/user/edit");
+        model.addAttribute("showLinkBack", false);
         return "users/details"; // users/details.html
     }
 
@@ -34,7 +35,9 @@ public class UserController {
     public String editForm(Authentication auth, Model model) {
         User user = userService.readByUsername(auth.getName());
         model.addAttribute("user", user);
+        model.addAttribute("roles", user.getRoles());
         model.addAttribute("actionUrl", "/user/edit");
+        model.addAttribute("backUrl", "/user");
         return "users/edit"; // users/edit.html
     }
 
