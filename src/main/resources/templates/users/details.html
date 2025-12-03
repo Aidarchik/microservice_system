@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Details</title>
+</head>
+<body>
+
+<h1>User Details</h1>
+
+<p><b>ID:</b> <span th:text="${user.id}"></span></p>
+<p><b>Name:</b> <span th:text="${user.firstName}"></span></p>
+<p><b>LastName:</b> <span th:text="${user.lastName}"></span></p>
+<p><b>Email:</b> <span th:text="${user.email}"></span></p>
+<p><b>Password:</b> <span th:text="${user.password}"></span></p>
+<p><b>Role:</b> <ul th:each="r : ${user.getRoles()}">
+    <li th:text="${r.roleName}"></li>
+</ul></p>
+
+<br>
+<a th:href="${editUrl}">Edit</a>
+<br><br>
+<div th:if="${showLinkBack}">
+    <a href="/admin/">Back</a>
+</div>
+
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Logout"/>
+</form>
+
+</body>
+</html>
