@@ -1,6 +1,5 @@
 package ru.itmentor.spring.boot_security.demo.controller;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.itmentor.spring.boot_security.demo.entity.Role;
 import ru.itmentor.spring.boot_security.demo.entity.User;
-import ru.itmentor.spring.boot_security.demo.repository.RoleRepository;
 import ru.itmentor.spring.boot_security.demo.service.RoleService;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
@@ -21,12 +19,10 @@ public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
-    private final PasswordEncoder passwordEncoder;
 
-    public AdminController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     // ----- READ ALL -----
@@ -40,7 +36,7 @@ public class AdminController {
     // ----- READ ONE -----
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.read(id));
+        model.addAttribute("user", userService.read(id).get());
         model.addAttribute("editUrl", "/admin/" + id + "/edit");
         model.addAttribute("showLinkBack", true);
         return "users/details"; // users/details.html
@@ -59,8 +55,6 @@ public class AdminController {
     @PostMapping
     public String create(@ModelAttribute("user") User user, @RequestParam("nameRoles") String[] role) {
         user.setRoles(roleService.findRoleByName(role));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
         userService.create(user);
         return "redirect:/admin/";
     }
@@ -74,7 +68,7 @@ public class AdminController {
     // ----- UPDATE: FORM -----
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.read(id));
+        model.addAttribute("user", userService.read(id).get());
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("actionUrl", "/admin/" + id);
         model.addAttribute("backUrl", "/admin/" + id);
@@ -85,13 +79,9 @@ public class AdminController {
     @PostMapping("/{id}")
     public String update(@PathVariable("id") Long id, @ModelAttribute("user") User user,
             @RequestParam("nameRoles") String[] role) {
-
-        for (String r : role)
-            System.out.println("РОЛИ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + r);
         user.setRoles(roleService.findRoleByName(role));
         user.setId(id);
-        user.setEnabled(true);
-        userService.update(user);
+        userService.update(id, user);
         return "redirect:/admin/";
     }
 

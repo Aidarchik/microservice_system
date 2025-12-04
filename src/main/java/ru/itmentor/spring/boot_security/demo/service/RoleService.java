@@ -5,7 +5,7 @@ import ru.itmentor.spring.boot_security.demo.entity.Role;
 import java.util.Set;
 
 public interface RoleService {
-    void createRole(Role role);
+    Role createRole(Role role);
 
     Set<Role> findRoleByName(String[] roleName);
 

@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Set;
 
 @Entity
@@ -34,6 +37,7 @@ public class User {
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Role> roles;
 
     public User() {

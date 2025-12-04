@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import ru.itmentor.spring.boot_security.demo.entity.User;
+import ru.itmentor.spring.boot_security.demo.service.RoleService;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
 @Controller
@@ -15,9 +18,11 @@ import ru.itmentor.spring.boot_security.demo.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     // ----- READ ONE -----
@@ -43,11 +48,13 @@ public class UserController {
 
     // ----- UPDATE: SUBMIT -----
     @PostMapping("/edit")
-    public String update(Authentication auth, @ModelAttribute("user") User user) {
+    public String update(Authentication auth, @ModelAttribute("user") User user,
+            @RequestParam("nameRoles") String[] role) {
         Long userId = userService.readByUsername(auth.getName()).getId();
+        user.setRoles(roleService.findRoleByName(role));
         user.setId(userId);
         user.setEnabled(true);
-        userService.update(user);
+        userService.update(userId, user);
         return "redirect:/user";
     }
 

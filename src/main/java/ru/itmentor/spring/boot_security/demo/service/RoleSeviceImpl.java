@@ -18,8 +18,8 @@ public class RoleSeviceImpl implements RoleService {
     }
 
     @Override
-    public void createRole(Role role) {
-        roleRepository.save(role);
+    public Role createRole(Role role) {
+        return roleRepository.save(role);
     }
 
     @Override

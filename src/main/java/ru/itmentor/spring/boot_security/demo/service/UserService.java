@@ -1,20 +1,20 @@
 package ru.itmentor.spring.boot_security.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import ru.itmentor.spring.boot_security.demo.entity.Role;
 import ru.itmentor.spring.boot_security.demo.entity.User;
 
 public interface UserService {
-    void create(User user);
+    User create(User user);
 
-    User read(Long id);
+    Optional<User> read(Long id);
 
     User readByUsername(String userName);
 
-    void update(User user);
+    Optional<User> update(Long id, User newUserData);
 
-    void delete(Long id);
+    boolean delete(Long id);
 
     List<User> findAll();
 
